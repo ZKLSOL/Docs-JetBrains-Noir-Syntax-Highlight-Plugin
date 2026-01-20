@@ -1,0 +1,193 @@
+---
+title: "LSP Intelligence"
+description: "Code completion, diagnostics, navigation, and more powered by nargo lsp"
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+
+The plugin integrates with `nargo lsp` (the Noir Language Server) to provide intelligent code assistance. This includes code completion, real-time diagnostics, navigation, hover information, and more.
+
+<Aside type="note">
+  LSP features require `nargo` to be installed and accessible. See [Installation](/installation) for setup instructions.
+</Aside>
+
+## Code Completion
+
+Get context-aware suggestions as you type.
+
+**Keyboard shortcut:** `Ctrl+Space` (or start typing after `.` or `::`)
+
+Code completion provides:
+- Function and method names
+- Struct fields
+- Module members
+- Import suggestions
+- Local variables
+- Type names
+
+```noir
+use std::hash::poseidon;
+
+fn example() {
+    // Type "pos" then Ctrl+Space to see poseidon suggestions
+    let hash = poseidon::bn254::hash_1([1]);
+
+    // After ".", completion shows available methods
+    let arr = [1, 2, 3];
+    let len = arr.len(); // .len() suggested after arr.
+}
+```
+
+## Diagnostics
+
+Real-time error and warning highlighting as you type.
+
+Diagnostics show:
+- **Errors** (red underline) - Code that won't compile
+- **Warnings** (yellow underline) - Potential issues
+
+```noir
+fn diagnostics_demo() {
+    let x: Field = "not a field";  // Error: type mismatch
+    let unused = 5;                 // Warning: unused variable
+}
+```
+
+Errors appear in:
+- The editor (underlined)
+- The gutter (red/yellow icons)
+- The Problems tool window
+
+<Aside type="tip">
+  Press `F2` to jump to the next error/warning in the file.
+</Aside>
+
+## Go to Definition
+
+Navigate to where a symbol is defined.
+
+**Keyboard shortcut:** `Cmd+B` (macOS) or `Ctrl+B` (Windows/Linux)
+
+Also works with:
+- `Cmd+Click` / `Ctrl+Click` on a symbol
+- Right-click → Go to → Declaration
+
+```noir
+use std::hash::poseidon;
+
+fn main() {
+    let result = helper_function(5);  // Cmd+B here → jumps to definition
+}
+
+fn helper_function(x: Field) -> Field {
+    x * 2
+}
+```
+
+Works for:
+- Functions
+- Structs
+- Modules
+- Imported items
+- Local variables
+
+## Hover Information
+
+See type information and documentation by hovering over symbols.
+
+Hover shows:
+- Type signatures
+- Function parameters
+- Documentation comments
+- Module paths
+
+```noir
+/// Adds two fields together
+fn add(a: Field, b: Field) -> Field {
+    a + b
+}
+
+fn demo() {
+    let result = add(1, 2);  // Hover over "add" to see signature and docs
+}
+```
+
+## Find References
+
+Find all usages of a symbol across your project.
+
+**Keyboard shortcut:** `Alt+F7` (macOS/Windows/Linux)
+
+Also available via:
+- Right-click → Find Usages
+- **Edit** → **Find** → **Find Usages**
+
+The References panel shows all locations where the symbol is used, organized by file.
+
+## Signature Help
+
+See function parameter hints while typing.
+
+**Keyboard shortcut:** `Cmd+P` (macOS) or `Ctrl+P` (Windows/Linux)
+
+When typing function arguments, signature help shows:
+- Parameter names and types
+- Current parameter (highlighted)
+- Overload information (if applicable)
+
+```noir
+fn greet(name: str<32>, times: u32) {
+    // ...
+}
+
+fn demo() {
+    greet( // Signature help appears here showing: name: str<32>, times: u32
+        "Alice",
+        3
+    );
+}
+```
+
+## Code Actions
+
+Quick fixes and refactoring suggestions.
+
+**Keyboard shortcut:** `Alt+Enter` (when cursor is on an issue)
+
+Also shown via the lightbulb icon in the gutter.
+
+Code actions may include:
+- Import suggestions
+- Quick fixes for common errors
+- Refactoring options
+
+<Aside type="note">
+  Available code actions depend on the nargo LSP version. Update nargo to get the latest features.
+</Aside>
+
+## Keyboard Shortcuts Summary
+
+| Action | macOS | Windows/Linux |
+|--------|-------|---------------|
+| Code Completion | `Ctrl+Space` | `Ctrl+Space` |
+| Go to Definition | `Cmd+B` | `Ctrl+B` |
+| Find References | `Alt+F7` | `Alt+F7` |
+| Signature Help | `Cmd+P` | `Ctrl+P` |
+| Code Actions | `Alt+Enter` | `Alt+Enter` |
+| Next Error | `F2` | `F2` |
+| Previous Error | `Shift+F2` | `Shift+F2` |
+
+<Aside type="tip">
+  These are default keymaps. Your actual shortcuts may vary if you've customized your keymap. Check **Settings → Keymap** to see or change shortcuts.
+</Aside>
+
+## Troubleshooting LSP
+
+If LSP features aren't working:
+
+1. **Check nargo is installed**: Run `nargo --version` in terminal
+2. **Restart LSP**: **Tools → Noir → Restart Language Server**
+3. **Check settings**: Ensure LSP is enabled in **Settings → Languages & Frameworks → Noir**
+4. **Check logs**: **Help → Show Log in Finder/Explorer** and search for "Noir"
+
+See [Troubleshooting](/troubleshooting) for more solutions.

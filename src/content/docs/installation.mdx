@@ -1,0 +1,164 @@
+---
+title: "Installation"
+description: "Install the Noir JetBrains Plugin from Marketplace or from source"
+---
+
+import { Steps, Aside, Tabs, TabItem } from '@astrojs/starlight/components';
+
+<Aside type="caution" title="IDE Version Required">
+  This plugin requires **JetBrains IDE 2025.2** or later. The plugin uses the native LSP API which is only available in 2025.2+.
+</Aside>
+
+## From JetBrains Marketplace (Recommended)
+
+<Steps>
+
+1. Open your JetBrains IDE (IntelliJ IDEA, CLion, RustRover, etc.)
+
+2. Go to **Settings/Preferences** → **Plugins** → **Marketplace**
+
+3. Search for "**Noir**"
+
+4. Click **Install** on the "Noir" plugin
+
+5. Restart the IDE when prompted
+
+</Steps>
+
+## Manual Installation
+
+If the plugin isn't available on Marketplace yet, or you need a specific version:
+
+<Steps>
+
+1. Download the latest `.zip` from [GitHub Releases](https://github.com/ZKLSOL/JetBrains-Noir-Syntax-Highlight-Plugin/releases)
+
+2. Go to **Settings/Preferences** → **Plugins** → **⚙️** (gear icon) → **Install Plugin from Disk...**
+
+3. Select the downloaded `.zip` file
+
+4. Restart the IDE
+
+</Steps>
+
+## Installing Nargo
+
+The plugin requires `nargo` (the Noir compiler toolchain) for LSP features like code completion, diagnostics, and navigation.
+
+<Tabs>
+  <TabItem label="noirup (Recommended)">
+    ```bash
+    # Install noirup
+    curl -L https://raw.githubusercontent.com/noir-lang/noirup/main/install | bash
+
+    # Install latest nargo
+    noirup
+
+    # Verify installation
+    nargo --version
+    ```
+  </TabItem>
+  <TabItem label="Homebrew (macOS)">
+    ```bash
+    brew install noir-lang/noir/nargo
+
+    # Verify installation
+    nargo --version
+    ```
+  </TabItem>
+  <TabItem label="From Source">
+    ```bash
+    # Clone the Noir repository
+    git clone https://github.com/noir-lang/noir.git
+    cd noir
+
+    # Build nargo
+    cargo build --release -p nargo_cli
+
+    # Add to PATH
+    export PATH="$PATH:$(pwd)/target/release"
+    ```
+  </TabItem>
+</Tabs>
+
+For full installation instructions, see the [official Noir documentation](https://noir-lang.org/docs/getting_started/installation/).
+
+## PATH Detection
+
+The plugin automatically detects `nargo` in the following order:
+
+<Steps>
+
+1. **Project Settings Override**
+   - If you've configured a nargo path in project settings, that takes precedence
+
+2. **Application Settings**
+   - Global nargo path configured in Settings → Languages & Frameworks → Noir
+
+3. **System PATH**
+   - The plugin searches your system PATH for the `nargo` executable
+
+</Steps>
+
+### Common PATH Issues
+
+If the plugin can't find nargo, check your shell configuration:
+
+**For Zsh (macOS default):**
+```bash
+# Add to ~/.zshrc
+export PATH="$HOME/.nargo/bin:$PATH"
+```
+
+**For Bash:**
+```bash
+# Add to ~/.bashrc or ~/.bash_profile
+export PATH="$HOME/.nargo/bin:$PATH"
+```
+
+<Aside type="tip">
+  After editing your shell config, restart your IDE completely (not just reload). The IDE inherits PATH from the shell that launched it.
+</Aside>
+
+### IDE-Launched PATH Issues
+
+If you launch your IDE from Spotlight, Dock, or Finder on macOS, it may not inherit your shell's PATH. Solutions:
+
+1. **Launch from Terminal:**
+   ```bash
+   open -a "IntelliJ IDEA"
+   ```
+
+2. **Set PATH in IDE:**
+   - Go to Settings → Languages & Frameworks → Noir
+   - Set the full path to nargo (e.g., `/Users/you/.nargo/bin/nargo`)
+
+3. **Use launchctl (macOS):**
+   ```bash
+   sudo launchctl config user path "$HOME/.nargo/bin:/usr/local/bin:/usr/bin:/bin"
+   # Then restart your Mac
+   ```
+
+## Verifying Installation
+
+After installation, verify everything works:
+
+<Steps>
+
+1. Open a `.nr` file in your IDE
+
+2. Check for **syntax highlighting** - keywords like `fn`, `struct`, `let` should be colored
+
+3. Press **Ctrl+Space** to test **code completion**
+
+4. Check the status bar for LSP status (should show "Noir" when connected)
+
+5. If LSP isn't working, go to **Tools → Noir → Restart Language Server**
+
+</Steps>
+
+## Next Steps
+
+- [Quick Start Guide](/quick-start) - 5-minute tutorial
+- [Configure Settings](/settings) - customize the plugin
+- [Troubleshooting](/troubleshooting) - if something isn't working

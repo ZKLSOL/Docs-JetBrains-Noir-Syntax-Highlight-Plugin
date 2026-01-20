@@ -1,0 +1,157 @@
+---
+title: "Actions"
+description: "Available actions in the Tools → Noir menu"
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+
+The plugin adds several actions to the **Tools → Noir** menu for managing the language server and exploring Noir features.
+
+## Restart Language Server
+
+**Location:** Tools → Noir → Restart Language Server
+
+Restarts the `nargo lsp` connection. Use this when:
+
+- You've updated nargo to a new version
+- The LSP seems stuck or unresponsive
+- Code completion or diagnostics stop working
+- You've changed nargo-related settings
+
+<Steps>
+
+1. Go to **Tools → Noir → Restart Language Server**
+2. Wait for the LSP to reinitialize (status bar will show progress)
+3. LSP features should now work with the fresh connection
+
+</Steps>
+
+<Aside type="tip">
+  If restarting doesn't help, try closing and reopening your `.nr` files, or restart the entire IDE.
+</Aside>
+
+## Expand Macros
+
+**Location:** Tools → Noir → Expand Macros
+
+Runs `nargo expand` on the current project and displays the expanded output.
+
+This is useful for:
+- Understanding what macros generate
+- Debugging macro-related issues
+- Seeing the full code after all macro expansions
+
+### How It Works
+
+<Steps>
+
+1. Open a Noir project in your IDE
+2. Go to **Tools → Noir → Expand Macros**
+3. The plugin runs `nargo expand` in the background
+4. Expanded output opens in a new scratch file
+
+</Steps>
+
+### Example
+
+Given this code with a macro:
+
+```noir
+#[oracle(get_secret)]
+unconstrained fn get_secret() -> Field {}
+
+fn main() {
+    let secret = unsafe { get_secret() };
+}
+```
+
+The expand action shows the generated code after macro expansion, revealing the underlying implementation.
+
+<Aside type="note">
+  The expanded output is read-only and opened in a scratch file. Changes won't affect your actual source code.
+</Aside>
+
+## Browse Standard Library
+
+**Location:** Tools → Noir → Browse Standard Library
+
+Opens the Noir standard library source files in your IDE.
+
+This is useful for:
+- Understanding how stdlib functions work
+- Finding available functions and modules
+- Learning Noir idioms from official code
+
+### How It Works
+
+<Steps>
+
+1. Go to **Tools → Noir → Browse Standard Library**
+2. The plugin locates the stdlib in your nargo installation
+3. The stdlib `lib.nr` file opens in the editor
+4. Navigate through the stdlib modules from there
+
+</Steps>
+
+### Finding the Stdlib
+
+The plugin finds the stdlib by:
+
+1. Running `nargo --version` to find the nargo executable
+2. Locating the stdlib relative to the nargo installation
+3. Typically found at `~/.nargo/backends/acvm-backend-barretenberg/stdlib/`
+
+<Aside type="caution">
+  This action requires nargo to be installed. If nargo isn't found, you'll see an error message.
+</Aside>
+
+### Stdlib Structure
+
+The standard library includes:
+
+```
+lib.nr              # Root module, re-exports everything
+├── collections/    # Array utilities, vectors
+├── convert/        # Type conversions
+├── hash/           # Poseidon, Pedersen, SHA256, etc.
+├── ec/             # Elliptic curve operations
+├── field/          # Field arithmetic
+├── merkle/         # Merkle tree utilities
+├── schnorr/        # Schnorr signatures
+├── ecdsa_secp256k1/ # ECDSA on secp256k1
+└── ...
+```
+
+## Accessing Actions
+
+Besides the menu, you can access actions via:
+
+### Search Everywhere
+
+Press **Shift+Shift** and type "Noir" to see all available actions:
+
+- "Restart Noir Language Server"
+- "Expand Macros"
+- "Browse Standard Library"
+
+### Keyboard Shortcuts
+
+You can assign custom keyboard shortcuts:
+
+<Steps>
+
+1. Go to **Settings → Keymap**
+2. Search for "Noir"
+3. Right-click an action → **Add Keyboard Shortcut**
+4. Press your desired key combination
+5. Click **OK**
+
+</Steps>
+
+## Action Availability
+
+| Action | Requires nargo | Requires open project |
+|--------|----------------|----------------------|
+| Restart Language Server | Yes | Yes |
+| Expand Macros | Yes | Yes |
+| Browse Standard Library | Yes | No |

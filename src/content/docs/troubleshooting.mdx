@@ -1,0 +1,256 @@
+---
+title: "Troubleshooting"
+description: "Common issues and solutions for the Noir JetBrains Plugin"
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+
+## LSP Not Working / No Code Completion
+
+**Symptoms:**
+- No code completion suggestions
+- No error highlighting
+- No hover information
+- Status bar doesn't show "Noir" indicator
+
+**Solutions:**
+
+<Steps>
+
+1. **Verify nargo is installed**
+   ```bash
+   nargo --version
+   ```
+   If not found, see [Installation](/installation) for setup.
+
+2. **Check PATH configuration**
+   Your IDE might not inherit your shell's PATH. Try:
+   - Launch IDE from terminal: `open -a "IntelliJ IDEA"`
+   - Or set explicit path in Settings → Languages & Frameworks → Noir
+
+3. **Check LSP is enabled**
+   Go to Settings → Languages & Frameworks → Noir and ensure "Enable LSP" is checked.
+
+4. **Restart the language server**
+   Tools → Noir → Restart Language Server
+
+5. **Restart the IDE**
+   Sometimes a full restart is needed after configuration changes.
+
+</Steps>
+
+## No Syntax Highlighting
+
+**Symptoms:**
+- `.nr` files show as plain text
+- Keywords aren't colored
+- No bracket matching
+
+**Solutions:**
+
+<Steps>
+
+1. **Check file extension**
+   Ensure the file ends with `.nr` (not `.noir` or other variants).
+
+2. **Verify plugin is enabled**
+   Go to Settings → Plugins and ensure "Noir" is listed and has a checkmark.
+
+3. **Reopen the file**
+   Close the file and reopen it. Sometimes the file type isn't recognized immediately.
+
+4. **Clear caches**
+   File → Invalidate Caches → Invalidate and Restart
+
+</Steps>
+
+<Aside type="note">
+  Syntax highlighting works independently of LSP. If syntax works but LSP doesn't, the issue is with nargo or LSP configuration, not the plugin itself.
+</Aside>
+
+## nargo Not Found in PATH
+
+**Symptoms:**
+- Error message: "nargo not found"
+- LSP fails to start
+- Actions like "Expand Macros" fail
+
+**Solutions:**
+
+### Check Shell Configuration
+
+nargo is typically installed to `~/.nargo/bin`. Ensure this is in your PATH:
+
+**For Zsh (macOS default):**
+```bash
+# Add to ~/.zshrc
+export PATH="$HOME/.nargo/bin:$PATH"
+```
+
+**For Bash:**
+```bash
+# Add to ~/.bashrc or ~/.bash_profile
+export PATH="$HOME/.nargo/bin:$PATH"
+```
+
+After editing, restart your terminal and IDE.
+
+### IDE PATH Inheritance Issue
+
+IDEs launched from Dock/Spotlight may not inherit shell PATH. Options:
+
+1. **Launch from terminal:**
+   ```bash
+   open -a "IntelliJ IDEA"
+   # or
+   open -a "RustRover"
+   ```
+
+2. **Set explicit path:**
+   Settings → Languages & Frameworks → Noir → Nargo path
+   ```
+   /Users/yourname/.nargo/bin/nargo
+   ```
+
+3. **Fix system PATH (macOS):**
+   ```bash
+   sudo launchctl config user path "$HOME/.nargo/bin:/usr/local/bin:/usr/bin:/bin"
+   ```
+   Then restart your Mac.
+
+## LSP Server Keeps Crashing
+
+**Symptoms:**
+- Features work briefly then stop
+- Repeated "LSP server stopped" notifications
+- Errors in IDE logs
+
+**Solutions:**
+
+<Steps>
+
+1. **Check IDE logs**
+   Help → Show Log in Finder/Explorer
+   Search for "Noir" or "nargo" to find error messages.
+
+2. **Update nargo**
+   ```bash
+   noirup
+   ```
+   Older nargo versions may have LSP bugs.
+
+3. **Try a different project**
+   If it only crashes on one project, there may be a syntax issue in your code that crashes the LSP.
+
+4. **Check for conflicting plugins**
+   Disable other language plugins temporarily to check for conflicts.
+
+</Steps>
+
+## Completion Is Slow/Laggy
+
+**Symptoms:**
+- Long delay before completion popup appears
+- IDE becomes unresponsive when typing
+- High CPU usage
+
+**Solutions:**
+
+<Steps>
+
+1. **Enable lightweight mode**
+   Settings → Languages & Frameworks → Noir → Enable "Lightweight mode"
+
+   This disables completion while keeping diagnostics and navigation.
+
+2. **Check project size**
+   Large projects with many files can slow down LSP. Consider:
+   - Excluding non-essential directories
+   - Breaking into smaller sub-projects
+
+3. **Update nargo**
+   ```bash
+   noirup
+   ```
+   Newer versions may have performance improvements.
+
+4. **Increase IDE memory**
+   Help → Edit Custom VM Options
+   ```
+   -Xmx4096m
+   ```
+   Restart IDE after changing.
+
+</Steps>
+
+## Diagnostics Not Appearing
+
+**Symptoms:**
+- Errors aren't highlighted
+- No problems in Problems tool window
+- Code compiles with errors but IDE shows none
+
+**Solutions:**
+
+<Steps>
+
+1. **Wait for indexing**
+   After opening a project, LSP needs time to analyze files. Wait for indexing to complete (shown in status bar).
+
+2. **Check for nargo compile errors**
+   Run `nargo check` in terminal. If it fails with an error, LSP may not be able to start properly.
+
+3. **Restart LSP**
+   Tools → Noir → Restart Language Server
+
+4. **Check lightweight mode**
+   Lightweight mode still shows diagnostics. If diagnostics are missing, it's not a lightweight mode issue.
+
+</Steps>
+
+## Checking IDE Logs
+
+To find detailed error information:
+
+<Steps>
+
+1. Go to **Help → Show Log in Finder/Explorer**
+
+2. Open `idea.log` (or the latest log file)
+
+3. Search for:
+   - "Noir"
+   - "nargo"
+   - "LSP"
+   - "Error"
+
+4. Look for stack traces or error messages
+
+</Steps>
+
+Common log locations:
+
+| OS | Location |
+|----|----------|
+| macOS | `~/Library/Logs/JetBrains/[IDE]/idea.log` |
+| Windows | `%APPDATA%\JetBrains\[IDE]\log\idea.log` |
+| Linux | `~/.cache/JetBrains/[IDE]/log/idea.log` |
+
+## Getting Help
+
+If these solutions don't work:
+
+1. **Check GitHub Issues**
+   [View existing issues](https://github.com/ZKLSOL/JetBrains-Noir-Syntax-Highlight-Plugin/issues)
+
+2. **Open a new issue**
+   Include:
+   - IDE name and version
+   - Plugin version
+   - nargo version (`nargo --version`)
+   - Steps to reproduce
+   - Relevant log excerpts
+
+3. **Noir Community**
+   - [Noir Discord](https://discord.gg/noir)
+   - [Noir GitHub](https://github.com/noir-lang/noir)

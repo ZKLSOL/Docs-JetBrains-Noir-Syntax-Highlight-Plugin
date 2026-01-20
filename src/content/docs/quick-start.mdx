@@ -1,0 +1,102 @@
+---
+title: "Quick Start"
+description: "Get up and running with the Noir JetBrains Plugin in 5 minutes"
+---
+
+import { Steps, Aside } from '@astrojs/starlight/components';
+
+This guide will help you install and verify the Noir JetBrains Plugin quickly.
+
+<Aside type="caution">
+  Requires JetBrains IDE **2025.2** or later.
+</Aside>
+
+## Installation Steps
+
+<Steps>
+
+1. **Install the Plugin**
+
+   Open your JetBrains IDE and go to:
+   - **Settings/Preferences** → **Plugins** → **Marketplace**
+   - Search for "**Noir**"
+   - Click **Install**
+   - Restart the IDE when prompted
+
+2. **Install Nargo**
+
+   The plugin requires `nargo` (the Noir compiler) for LSP features. Install it using noirup:
+
+   ```bash
+   curl -L https://raw.githubusercontent.com/noir-lang/noirup/main/install | bash
+   noirup
+   ```
+
+   Verify installation:
+   ```bash
+   nargo --version
+   ```
+
+3. **Open a Noir Project**
+
+   Open or create a Noir project. If you don't have one, create a new project:
+
+   ```bash
+   nargo new my_project
+   cd my_project
+   ```
+
+   Then open the folder in your JetBrains IDE.
+
+4. **Verify It Works**
+
+   Open `src/main.nr` and you should see:
+   - **Syntax highlighting** for keywords, types, and comments
+   - **Code completion** when typing (Ctrl+Space)
+   - **Error diagnostics** if there are issues
+   - **Hover information** when hovering over symbols
+
+</Steps>
+
+## What's Next?
+
+Now that you have the plugin running:
+
+- [Learn about LSP features](/lsp-intelligence) - code completion, go-to-definition, hover
+- [Explore Live Templates](/live-templates) - quickly scaffold common Noir code
+- [Configure settings](/settings) - customize nargo path, enable/disable features
+- [Troubleshoot issues](/troubleshooting) - if something isn't working
+
+## Sample Project
+
+Want to explore the plugin features? Create this sample file:
+
+```noir
+use std::hash::poseidon;
+
+struct Point {
+    x: Field,
+    y: Field,
+}
+
+fn main(a: Field, b: Field) -> pub Field {
+    let sum = add(a, b);
+    poseidon::bn254::hash_1([sum])
+}
+
+fn add(x: Field, y: Field) -> Field {
+    x + y
+}
+
+#[test]
+fn test_add() {
+    let result = add(2, 3);
+    assert(result == 5);
+}
+```
+
+With this code you can test:
+- Syntax highlighting for all token types
+- Code completion for `std::` imports
+- Go-to-definition on the `add` function
+- Test gutter icon next to `#[test]`

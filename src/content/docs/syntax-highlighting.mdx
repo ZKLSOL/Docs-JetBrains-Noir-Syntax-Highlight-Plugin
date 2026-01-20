@@ -1,0 +1,174 @@
+---
+title: "Syntax Highlighting"
+description: "Native syntax highlighting for Noir source files in JetBrains IDEs"
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+The Noir JetBrains Plugin provides native syntax highlighting for `.nr` files. Highlighting works immediately without requiring LSP connection, making it reliable and fast.
+
+## Highlighted Elements
+
+### Keywords
+
+Control flow and declaration keywords are highlighted:
+
+```noir
+fn main() {
+    let x = 5;
+    if x > 0 {
+        for i in 0..10 {
+            // loop body
+        }
+    } else {
+        while true {
+            break;
+        }
+    }
+}
+
+struct Point { x: Field, y: Field }
+mod utils;
+use std::hash;
+pub fn public_func() {}
+```
+
+Keywords include: `fn`, `let`, `mut`, `if`, `else`, `for`, `in`, `while`, `loop`, `match`, `return`, `break`, `continue`, `struct`, `impl`, `trait`, `mod`, `use`, `pub`, `crate`, `self`, `super`, `as`, `where`, `type`, `const`, `static`, `unsafe`, `async`, `await`, `dyn`, `move`, `ref`, `box`
+
+### Types
+
+Built-in types are highlighted with a distinct color:
+
+```noir
+fn types_example(
+    a: Field,
+    b: bool,
+    c: u8,
+    d: u16,
+    e: u32,
+    f: u64,
+    g: i8,
+    h: i32,
+    i: str<32>,
+) {}
+```
+
+Types include: `Field`, `bool`, `u8`, `u16`, `u32`, `u64`, `u128`, `i8`, `i16`, `i32`, `i64`, `i128`, `str`, `Self`
+
+### Strings
+
+Multiple string types are supported:
+
+```noir
+fn string_examples() {
+    // Regular strings
+    let s1 = "Hello, world!";
+
+    // Raw strings (no escape processing)
+    let s2 = r#"Raw string with "quotes""#;
+    let s3 = r##"Even more # symbols"##;
+
+    // Format strings
+    let name = "Alice";
+    let s4 = f"Hello, {name}!";
+}
+```
+
+### Comments
+
+Both line and block comments are highlighted:
+
+```noir
+// This is a line comment
+
+/*
+ * This is a block comment
+ * It can span multiple lines
+ */
+
+fn example() {
+    // Comments can appear anywhere
+    let x = 5; // Including at end of lines
+
+    /* Block comments /* can nest */ properly */
+}
+```
+
+### Numeric Literals
+
+Decimal and hexadecimal numbers are highlighted:
+
+```noir
+fn numbers() {
+    let decimal = 42;
+    let hex = 0xDEADBEEF;
+    let binary = 0b1010;
+    let with_underscores = 1_000_000;
+}
+```
+
+### Attributes
+
+Attributes (including test markers) are highlighted:
+
+```noir
+#[test]
+fn test_something() {
+    assert(true);
+}
+
+#[allow(unused)]
+fn unused_function() {}
+
+#[oracle(get_random)]
+unconstrained fn get_random() -> Field {}
+```
+
+### Boolean Literals
+
+True and false are highlighted:
+
+```noir
+fn booleans() {
+    let yes = true;
+    let no = false;
+}
+```
+
+## Additional Editor Features
+
+### Comment Toggling
+
+Use keyboard shortcuts to quickly toggle comments:
+
+- **Line comment**: `Cmd+/` (macOS) or `Ctrl+/` (Windows/Linux)
+- **Block comment**: `Cmd+Shift+/` (macOS) or `Ctrl+Shift+/` (Windows/Linux)
+
+### Bracket Matching
+
+The plugin provides bracket matching for:
+- Curly braces: `{ }`
+- Square brackets: `[ ]`
+- Parentheses: `( )`
+
+Click next to a bracket to highlight its matching pair. Double-click to select the content between brackets.
+
+## Color Customization
+
+The plugin uses standard JetBrains color scheme keys, so your theme's colors will apply automatically:
+
+| Element | Color Scheme Key |
+|---------|-----------------|
+| Keywords | `KEYWORD` |
+| Types | `CLASS_NAME` |
+| Strings | `STRING` |
+| Numbers | `NUMBER` |
+| Comments | `LINE_COMMENT`, `BLOCK_COMMENT` |
+| Attributes | `METADATA` |
+| Booleans | `KEYWORD` |
+
+To customize colors, go to **Settings → Editor → Color Scheme → General** and modify the relevant keys.
+
+<Aside type="tip">
+  Syntax highlighting works independently of LSP. Even if nargo isn't installed, you'll still get full syntax highlighting for Noir files.
+</Aside>

@@ -1,0 +1,219 @@
+---
+title: "Live Templates"
+description: "Quickly scaffold common Noir code patterns with built-in templates"
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+Live templates let you quickly insert common code patterns. Type the template prefix and press **Tab** to expand.
+
+## Available Templates
+
+The plugin includes 13 built-in templates, ordered by frequency of use:
+
+### 1. `fn` - Function Declaration
+
+**Prefix:** `fn` + Tab
+
+```noir
+fn function_name(params) {
+    // cursor here
+}
+```
+
+Template variables:
+- `function_name` - Name of the function (editable)
+- `params` - Parameter list (editable)
+
+### 2. `struct` - Struct Declaration
+
+**Prefix:** `struct` + Tab
+
+```noir
+struct StructName {
+    // cursor here
+}
+```
+
+### 3. `let` - Variable Declaration
+
+**Prefix:** `let` + Tab
+
+```noir
+let name = value;
+```
+
+### 4. `if` - If Statement
+
+**Prefix:** `if` + Tab
+
+```noir
+if condition {
+    // cursor here
+}
+```
+
+### 5. `for` - For Loop
+
+**Prefix:** `for` + Tab
+
+```noir
+for i in 0..n {
+    // cursor here
+}
+```
+
+### 6. `forin` - For-In Loop
+
+**Prefix:** `forin` + Tab
+
+```noir
+for item in collection {
+    // cursor here
+}
+```
+
+### 7. `fnmain` - Main Function
+
+**Prefix:** `fnmain` + Tab
+
+```noir
+fn main() {
+    // cursor here
+}
+```
+
+### 8. `else` - Else Block
+
+**Prefix:** `else` + Tab
+
+```noir
+else {
+    // cursor here
+}
+```
+
+### 9. `elseif` - Else-If Statement
+
+**Prefix:** `elseif` + Tab
+
+```noir
+else if condition {
+    // cursor here
+}
+```
+
+### 10. `mod` - Module Declaration
+
+**Prefix:** `mod` + Tab
+
+```noir
+mod module_name;
+```
+
+### 11. `use` - Use Statement
+
+**Prefix:** `use` + Tab
+
+```noir
+use path::to::module;
+```
+
+### 12. `letfor` - Array Comprehension
+
+**Prefix:** `letfor` + Tab
+
+```noir
+let arr = [expression; for i in 0..n];
+```
+
+### 13. `letforin` - Array Comprehension with Iterator
+
+**Prefix:** `letforin` + Tab
+
+```noir
+let arr = [expression; for item in collection];
+```
+
+## Using Templates
+
+<Aside type="tip">
+  Templates are context-aware and only appear in `.nr` files where they make sense.
+</Aside>
+
+### Basic Usage
+
+1. Type the template prefix (e.g., `fn`)
+2. Press **Tab** to expand
+3. Edit the placeholder values
+4. Press **Tab** to move to the next placeholder
+5. Press **Enter** to finish
+
+### Example Workflow
+
+Creating a test function:
+
+1. Type `fn` + Tab
+2. Change `function_name` to `test_add`
+3. Tab to parameters, type `a: Field, b: Field`
+4. Tab to body, type your test code
+5. Add `#[test]` attribute above
+
+```noir
+#[test]
+fn test_add(a: Field, b: Field) {
+    assert(a + b == 5);
+}
+```
+
+## Viewing All Templates
+
+To see all available templates:
+
+1. Go to **Settings → Editor → Live Templates**
+2. Expand the **Noir** group
+3. View or edit any template
+
+## Creating Custom Templates
+
+You can create your own templates:
+
+1. Go to **Settings → Editor → Live Templates**
+2. Click **+** and select **Live Template**
+3. Set:
+   - **Abbreviation**: The prefix to type
+   - **Description**: What the template does
+   - **Template text**: The code to insert (use `$VAR$` for placeholders)
+4. Click **Define** and select **Noir** as the context
+5. Click **OK**
+
+### Example Custom Template
+
+Create a test function template:
+
+- **Abbreviation:** `test`
+- **Template text:**
+  ```
+  #[test]
+  fn test_$NAME$() {
+      $END$
+  }
+  ```
+
+Variables:
+- `$NAME$` - Editable placeholder
+- `$END$` - Final cursor position
+
+## Template Variables
+
+Templates use special variables:
+
+| Variable | Description |
+|----------|-------------|
+| `$NAME$` | Custom named placeholder |
+| `$END$` | Final cursor position after expansion |
+| `$SELECTION$` | Currently selected text (for surround templates) |
+
+<Aside type="note">
+  Press **Ctrl+J** (macOS/Windows/Linux) to see a list of available templates at the current cursor position.
+</Aside>

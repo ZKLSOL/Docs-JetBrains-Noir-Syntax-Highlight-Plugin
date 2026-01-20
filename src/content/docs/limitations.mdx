@@ -1,0 +1,178 @@
+---
+title: "Known Limitations"
+description: "Current limitations and planned features for the Noir JetBrains Plugin"
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+This page documents known limitations of the plugin. Understanding these helps set appropriate expectations.
+
+## IDE Version Requirement
+
+<Aside type="caution">
+  The plugin requires **JetBrains IDE 2025.2** or later.
+</Aside>
+
+**Why:** The plugin uses JetBrains' native LSP API, which was introduced in version 2025.2. This API provides better performance and integration than older approaches.
+
+**Affected users:** Anyone using IDE versions prior to 2025.2 (e.g., 2024.x, 2023.x).
+
+**Workaround:** Update to IDE version 2025.2 or later. All JetBrains IDEs (IntelliJ IDEA, CLion, RustRover, WebStorm, etc.) version 2025.2+ are supported.
+
+## Test Gutter Icon (Preview Feature)
+
+**Current state:** The plugin shows a test tube icon next to `#[test]` functions in the gutter.
+
+**Limitation:** Clicking the icon does not run the test. The run action is not yet implemented.
+
+```noir
+#[test]  // ← Test tube icon appears here
+fn test_example() {
+    assert(1 + 1 == 2);
+}
+```
+
+**Current behavior:**
+- Icon is displayed ✓
+- Visual indicator of test functions ✓
+- Run test on click ✗ (not implemented)
+
+**Workaround:** Run tests from the terminal:
+```bash
+nargo test
+# or specific test
+nargo test test_example
+```
+
+## No Run Configuration
+
+**Limitation:** The plugin does not provide run configurations for Noir programs. You cannot run or debug Noir programs directly from the IDE.
+
+**Workaround:** Use the terminal:
+```bash
+# Execute the program
+nargo execute
+
+# Run tests
+nargo test
+
+# Build the circuit
+nargo compile
+
+# Generate proofs
+nargo prove
+```
+
+<Aside type="tip">
+  You can configure External Tools in the IDE to run nargo commands:
+  Settings → Tools → External Tools → Add (+)
+</Aside>
+
+## No Nargo.toml Support
+
+**Limitation:** The plugin does not parse or provide intelligence for `Nargo.toml` files.
+
+**What doesn't work:**
+- Syntax highlighting for Nargo.toml
+- Completion for dependency names
+- Validation of configuration values
+- Navigation to dependency sources
+
+**Workaround:** Edit Nargo.toml as a plain text file. Refer to the [Noir documentation](https://noir-lang.org/docs/reference/nargo_toml/) for the correct format.
+
+## No Code Folding
+
+**Limitation:** Functions, structs, modules, and other code blocks cannot be folded/collapsed.
+
+```noir
+fn example() {     // Cannot fold this
+    // lots of code
+}
+
+struct Point {     // Cannot fold this either
+    x: Field,
+    y: Field,
+}
+```
+
+**Workaround:** Use IDE navigation features instead:
+- `Cmd+F12` / `Ctrl+F12` to see file structure
+- `Cmd+B` / `Ctrl+B` to jump to definitions
+
+## No Structure View
+
+**Limitation:** The Structure tool window (Alt+7) does not show an outline of Noir files.
+
+**What doesn't work:**
+- File outline in Structure panel
+- Navigation via structure view
+- Symbol overview
+
+**Workaround:** Use:
+- Search Everywhere (`Shift+Shift`) to find symbols
+- Go to Symbol (`Cmd+Alt+O` / `Ctrl+Alt+Shift+N`)
+- Grep/search for function names
+
+## nargo LSP Limitations
+
+Some features depend on the capabilities of `nargo lsp`. Limitations in nargo's LSP affect the plugin.
+
+**Examples:**
+- Rename refactoring may not be available
+- Some code actions may be missing
+- Certain edge cases may not be handled
+
+**Solution:** Update nargo to the latest version:
+```bash
+noirup
+```
+
+The Noir team continuously improves the LSP. Updating often enables new features.
+
+## Performance on Large Projects
+
+**Limitation:** Very large projects with many files may experience:
+- Slow indexing on project open
+- Delayed code completion
+- High memory usage
+
+**Workarounds:**
+1. Enable lightweight mode (Settings → Languages & Frameworks → Noir)
+2. Increase IDE memory (Help → Edit Custom VM Options → `-Xmx4096m`)
+3. Exclude non-essential directories from indexing
+
+## No Debugging Support
+
+**Limitation:** The plugin does not provide debugging capabilities for Noir programs.
+
+**Why:** Noir compiles to zero-knowledge circuits, which don't have a traditional debugging model with breakpoints and step-through execution.
+
+**Alternatives:**
+- Add `println` statements (in unconstrained functions)
+- Use `assert` statements to check conditions
+- Use `nargo test` for unit testing
+- Use the Expand Macros action to inspect generated code
+
+## Planned Improvements
+
+These limitations are on the roadmap for future versions:
+
+| Feature | Status |
+|---------|--------|
+| Run test from gutter | Planned |
+| Nargo.toml support | Planned |
+| Code folding | Planned |
+| Structure view | Planned |
+| Run configurations | Under consideration |
+
+Check the [GitHub repository](https://github.com/ZKLSOL/JetBrains-Noir-Syntax-Highlight-Plugin) for the latest updates and to request features.
+
+## Reporting Issues
+
+If you encounter a limitation not listed here, or if a listed limitation is blocking your workflow:
+
+1. Check [existing issues](https://github.com/ZKLSOL/JetBrains-Noir-Syntax-Highlight-Plugin/issues)
+2. Open a new issue with:
+   - Description of the limitation
+   - Your use case
+   - Any workarounds you've tried

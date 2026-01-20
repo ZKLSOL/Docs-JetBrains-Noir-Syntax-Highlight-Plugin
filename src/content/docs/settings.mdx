@@ -1,0 +1,161 @@
+---
+title: "Settings"
+description: "Configure the Noir JetBrains Plugin settings"
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+
+The plugin provides both application-level (global) and project-level settings.
+
+**Location:** Settings → Languages & Frameworks → Noir
+
+## Application Settings (Global)
+
+These settings apply to all projects unless overridden at the project level.
+
+### Available Settings
+
+| Setting | Description | Default |
+|---------|-------------|---------|
+| **Nargo path** | Path to the `nargo` executable | Auto-detect from PATH |
+| **Enable LSP** | Enable/disable the language server | Enabled |
+| **Lightweight mode** | Disable completions, signature help, and code actions | Disabled |
+
+### Nargo Path
+
+By default, the plugin searches for `nargo` in your system PATH. You can override this with an explicit path:
+
+```
+/Users/yourname/.nargo/bin/nargo
+```
+
+This is useful when:
+- nargo isn't in your PATH
+- You have multiple nargo versions installed
+- Your IDE doesn't inherit your shell's PATH
+
+### Enable LSP
+
+Toggle the language server on/off. When disabled:
+- Syntax highlighting still works
+- Code completion is disabled
+- Diagnostics are disabled
+- Go-to-definition is disabled
+- Hover information is disabled
+
+<Aside type="tip">
+  Disabling LSP can be useful for viewing files without nargo installed, or when working on very large projects where LSP causes performance issues.
+</Aside>
+
+### Lightweight Mode
+
+When enabled, the LSP runs in a reduced feature mode:
+
+| Feature | Normal Mode | Lightweight Mode |
+|---------|-------------|------------------|
+| Syntax highlighting | Yes | Yes |
+| Diagnostics | Yes | Yes |
+| Go to definition | Yes | Yes |
+| Hover information | Yes | Yes |
+| **Code completion** | Yes | **No** |
+| **Signature help** | Yes | **No** |
+| **Code actions** | Yes | **No** |
+
+Use lightweight mode when:
+- Working with large projects
+- Your machine has limited resources
+- You only need basic navigation and error checking
+- LSP responses are slow
+
+## Project Settings (Override)
+
+Project settings override application settings for a specific project.
+
+### Accessing Project Settings
+
+<Steps>
+
+1. Open your project in the IDE
+2. Go to **Settings → Languages & Frameworks → Noir**
+3. The same settings panel shows both levels
+4. Project-specific values override global values
+
+</Steps>
+
+### Nargo Path Override
+
+You can set a different nargo path per-project. This is useful when:
+- Different projects require different nargo versions
+- You're testing with a development build of nargo
+- Team members have different nargo installation paths
+
+### Settings Precedence
+
+```
+┌─────────────────────────────────┐
+│     Project Settings            │ ← Highest priority
+├─────────────────────────────────┤
+│     Application Settings        │
+├─────────────────────────────────┤
+│     Auto-detect (PATH)          │ ← Lowest priority
+└─────────────────────────────────┘
+```
+
+When determining which nargo to use:
+
+1. **Project settings override** - If set, use this
+2. **Application settings** - If set, use this
+3. **PATH auto-detection** - Search PATH for `nargo`
+
+## Applying Settings Changes
+
+Most settings take effect immediately. However:
+
+- **Nargo path changes**: Restart LSP to use the new path
+  - Go to **Tools → Noir → Restart Language Server**
+
+- **Enable LSP toggle**: May require reopening files
+  - Close and reopen any `.nr` files
+
+- **Lightweight mode**: Takes effect immediately
+  - No restart needed
+
+## Settings Storage
+
+| Setting Level | Storage Location |
+|---------------|------------------|
+| Application | `~/Library/Application Support/JetBrains/[IDE]/options/NoirSettings.xml` (macOS) |
+| Project | `.idea/workspace.xml` in your project |
+
+<Aside type="caution">
+  Project settings are stored in `.idea/workspace.xml`, which is typically gitignored. This means project settings aren't shared between team members by default.
+</Aside>
+
+## Resetting to Defaults
+
+To reset settings:
+
+<Steps>
+
+1. Go to **Settings → Languages & Frameworks → Noir**
+2. Clear the nargo path field (to use auto-detection)
+3. Check "Enable LSP" to enable
+4. Uncheck "Lightweight mode" to disable
+5. Click **OK**
+
+</Steps>
+
+## Troubleshooting Settings
+
+### Settings Not Taking Effect
+
+1. Restart the language server: **Tools → Noir → Restart Language Server**
+2. Restart the IDE completely
+3. Check the IDE logs for errors: **Help → Show Log in Finder/Explorer**
+
+### Can't Find Settings Panel
+
+The settings panel appears under **Languages & Frameworks → Noir**. If you don't see it:
+1. Ensure the plugin is installed and enabled
+2. Go to **Settings → Plugins** and verify "Noir" is listed and enabled
+3. Restart the IDE

@@ -1,0 +1,74 @@
+---
+title: "Introduction"
+description: "Full-featured IDE support for the Noir zero-knowledge programming language in JetBrains IDEs"
+---
+
+import { Card, CardGrid, Aside } from '@astrojs/starlight/components';
+
+The **Noir JetBrains Plugin** brings full IDE support for the [Noir](https://noir-lang.org/) zero-knowledge programming language to JetBrains IDEs like IntelliJ IDEA, CLion, RustRover, and more.
+
+<Aside type="caution" title="IDE Version Required">
+  This plugin requires **JetBrains IDE 2025.2** or later. It uses the new native LSP API which is not available in older versions.
+</Aside>
+
+## Features
+
+<CardGrid stagger>
+  <Card title="Syntax Highlighting" icon="pencil">
+    Native highlighting for keywords, types, strings, comments, attributes, and more. No external dependencies required.
+  </Card>
+  <Card title="LSP Intelligence" icon="rocket">
+    Full LSP integration with nargo lsp for code completion, diagnostics, go-to-definition, hover, and more.
+  </Card>
+  <Card title="Live Templates" icon="document">
+    13 built-in templates for common Noir constructs. Type `fn` + Tab to expand function declarations instantly.
+  </Card>
+  <Card title="Test Gutter Icons" icon="approve-check">
+    Visual indicators for `#[test]` functions right in the editor gutter.
+  </Card>
+  <Card title="Macro Expansion" icon="magnifier">
+    View expanded macro output with Tools → Noir → Expand Macros.
+  </Card>
+  <Card title="Stdlib Browser" icon="open-book">
+    Browse Noir standard library source directly in your IDE.
+  </Card>
+</CardGrid>
+
+## Quick Links
+
+<CardGrid>
+  <Card title="Installation" icon="download">
+    Install from JetBrains Marketplace or build from source.
+    [Learn more →](/installation)
+  </Card>
+  <Card title="Quick Start" icon="rocket">
+    Get up and running in 5 minutes.
+    [Get started →](/quick-start)
+  </Card>
+  <Card title="LSP Features" icon="seti:json">
+    Code completion, diagnostics, navigation, and more.
+    [Explore →](/lsp-intelligence)
+  </Card>
+  <Card title="Troubleshooting" icon="warning">
+    Common issues and solutions.
+    [Get help →](/troubleshooting)
+  </Card>
+</CardGrid>
+
+## Supported IDEs
+
+The plugin works with any JetBrains IDE version 2025.2 or later:
+
+- IntelliJ IDEA (Community & Ultimate)
+- CLion
+- RustRover
+- WebStorm
+- PyCharm
+- GoLand
+- And more...
+
+## About Noir
+
+[Noir](https://noir-lang.org/) is a domain-specific language for writing zero-knowledge circuits. It provides a Rust-like syntax with features designed for ZK development, including native field arithmetic, constraint generation, and proving system integration.
+
+This plugin brings first-class Noir support to JetBrains IDEs, leveraging the official `nargo lsp` language server for accurate, up-to-date IDE intelligence.
